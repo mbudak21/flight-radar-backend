@@ -1,0 +1,43 @@
+services:
+  app:
+    image: flight-radar-backend:1.0
+    container_name: flight-radar-backend
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      mysqldb:
+        condition: service_healthy
+    ports:
+      - '8080:8080'
+    networks:
+      - local-network
+
+  mysqldb:
+    image: mysql:8.0.44-oracle
+    container_name: flight-radar-mysqldb
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'mysql-db'
+      MYSQL_USER: 'user'
+      MYSQL_PASSWORD: 'password'
+      MYSQL_ROOT_PASSWORD: 'password'
+    networks:
+      - local-network
+    ports:
+      - '3306:3306'
+    volumes:
+#      - mysql-data:/var/lib/mysqldb
+      - ./mysql-db-dump.sql:/docker-entrypoint-initdb.d/mysql-db-dump.sql:ro
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+volumes:
+  mysql-data:
+
+networks:
+  local-network:
+    driver: bridge
