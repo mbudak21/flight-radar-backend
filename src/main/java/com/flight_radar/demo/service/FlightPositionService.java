@@ -44,6 +44,8 @@ public class FlightPositionService {
         FlightRecord flight = flightRecordRepository.findById(flightId)
                 .orElseThrow(() -> new RuntimeException("FlightId not found"));
 
+
+
         FlightPosition pos = new FlightPosition();
         pos.setFlightRecord(flight); // Link the foreign key
         pos.setLatitude(lat);

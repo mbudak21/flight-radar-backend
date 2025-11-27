@@ -22,10 +22,6 @@ public class FlightRecordService {
         return  flightRecordRepository.findAll();
     }
 
-    public FlightRecord save(FlightRecord flightRecord) {
-        return flightRecordRepository.save(flightRecord);
-    }
-
     @Transactional
     public FlightRecord getFlightRecordById(Integer flightRecordId) {
         return flightRecordRepository.findById(flightRecordId)
