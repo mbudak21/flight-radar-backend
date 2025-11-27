@@ -1,4 +1,4 @@
-package util;
+package com.flight_radar.demo.util;
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -21,6 +21,6 @@ public class GlobalExceptionHandler {
 
         Map<String, Object> body = Map.of("message", "A position for this flight at the given time already exists.");
 
-        return ResponseEntity.status(HttpStatus.ALREADY_REPORTED).body(body);
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(body);
     }
 }
