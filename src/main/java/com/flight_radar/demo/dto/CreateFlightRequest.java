@@ -3,11 +3,11 @@ package com.flight_radar.demo.dto;
 import java.time.LocalDateTime;
 
 public record CreateFlightRequest(
-        String startLocationName,
+        LocalDateTime startDate,d   
         Double startLatitude,
         Double startLongitude,
-        String endLocationName,
+        String startLocationName,
         Double endLatitude,
         Double endLongitude,
-        LocalDateTime startDate
-) {}
+        String endLocationName
+        ) {}
