@@ -61,6 +61,7 @@ public class FlightDataController {
 
     @PostMapping
     public ResponseEntity<FlightRecord> createFlight(@Valid @RequestBody CreateFlightRequest req) {
+        System.out.println(req.startDate());
         FlightRecord savedRecord = flightRecordService.createNewFlightRecord(
                 req.startDate(),
                 req.startLatitude(),
@@ -68,7 +69,7 @@ public class FlightDataController {
                 req.startLocationName(),
                 req.endLatitude(),
                 req.endLongitude(),
-                req.startDate()
+                req.endLocationName()
         );
         return ResponseEntity.ok(savedRecord);
     }
