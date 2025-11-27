@@ -1,36 +1,68 @@
 CREATE DATABASE IF NOT EXISTS `mysql-db`;
 USE `mysql-db`;
 
-
-CREATE TABLE IF NOT EXISTS FlightRecord (
+# Tables
+DROP TABLE flight_record;
+CREATE TABLE IF NOT EXISTS flight_record (
     ID INT AUTO_INCREMENT PRIMARY KEY,
-    StartDate DATETIME NOT NULL,
-    StartLocation VARCHAR(255),
-    EndLocation VARCHAR(255)
+    start_date DATETIME NOT NULL,
+
+    start_latitude DOUBLE NOT NULL,
+    start_longitude DOUBLE NOT NULL,
+    start_location_name VARCHAR(255),
+
+    end_latitude DOUBLE,
+    end_longitude DOUBLE,
+    end_location_name VARCHAR(255)
 );
 
-CREATE TABLE IF NOT EXISTS FlightPosition (
-    PID INT NOT NULL,
-    DateTime DATETIME NOT NULL,
-    Latitude DOUBLE NOT NULL,
-    Longitude DOUBLE NOT NULL,
-    FOREIGN KEY (PID) REFERENCES FlightRecord(ID)
+DROP TABLE flight_position;
+CREATE TABLE IF NOT EXISTS flight_position (
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    flight_ID INT NOT NULL,
+    time DATETIME NOT NULL,
+    latitude DOUBLE NOT NULL,
+    longitude DOUBLE NOT NULL,
+    FOREIGN KEY (flight_ID) REFERENCES flight_record(ID)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
-    PRIMARY KEY (PID, DateTime)
+    UNIQUE (flight_ID, time) -- Ensure data integrity
 );
 
--- INSERT INTO FlightRecord (StartDate, StartLocation, EndLocation)
--- VALUES
---     ('2025-11-01 09:00:00', 'Istanbul', 'Berlin'),
---     ('2025-11-02 14:30:00', 'Ankara', 'London');
---
--- INSERT INTO FlightPosition (PID, DateTime, Latitude, Longitude)
--- VALUES
---     (1, '2025-11-01 09:05:00', 41.0082, 28.9784),
---     (1, '2025-11-01 09:20:00', 42.2000, 29.5000);
---
--- INSERT INTO FlightPosition (PID, DateTime, Latitude, Longitude)
--- VALUES
---     (2, '2025-11-02 14:35:00', 39.9334, 32.8597),
---     (2, '2025-11-02 14:50:00', 40.5000, 30.0000);
+# Helpers
+SELECT * FROM flight_position;
+SELECT * FROM flight_record;
+
+DESCRIBE flight_record;
+DESCRIBE flight_position;
+
+
+INSERT INTO flight_position (flight_ID, time, latitude, longitude)
+VALUES
+    (1, '2025-11-01 09:00:00', 40.1281, 32.9951),
+    (2, '2025-11-02 14:30:00', 32.9951, 32.9951);
+
+
+
+
+
+
+
+INSERT INTO flight_record (
+    start_date,
+    start_latitude, start_longitude, start_location_name,
+    end_latitude, end_longitude, end_location_name
+)
+VALUES
+    -- Flight 1: Istanbul -> Berlin
+    (
+        '2025-11-27 09:00:00',
+        41.2753, 28.7519, 'Istanbul Airport (IST)',
+        52.3667, 13.5033, 'Berlin Brandenburg (BER)'
+    ),
+    -- Flight 2: Ankara -> London
+    (
+        '2025-11-27 14:30:00',
+        40.1281, 32.9951, 'Ankara Esenboğa (ESB)',
+        51.4700, -0.4543, 'London Heathrow (LHR)'
+    );
