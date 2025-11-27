@@ -17,16 +17,16 @@ public class FlightRecord {
     @Column(name = "start_latitude")
     private Double startLatitude;
     @Column(name = "start_longitude")
-    private Double StartLongitude;
+    private Double startLongitude;
     @Column(name = "start_location_name")
-    private String StartLocationName;
+    private String startLocationName;
 
     @Column(name = "end_latitude")
-    private Double EndLatitude;
+    private Double endLatitude;
     @Column(name = "end_longitude")
-    private Double EndLongitude;
+    private Double endLongitude;
     @Column(name = "end_location_name")
-    private String EndLocationName;
+    private String endLocationName;
 
 //    @OneToMany(mappedBy = "FlightRecord", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 //    private List<FlightPosition> positions;
@@ -35,51 +35,67 @@ public class FlightRecord {
     public Integer getId() {
         return id;
     }
+
     public void setId(Integer id) {
         this.id = id;
     }
+
     public LocalDateTime getStartDate() {
         return startDate;
     }
+
     public void setStartDate(LocalDateTime startDate) {
         this.startDate = startDate;
     }
+
     public Double getStartLatitude() {
         return startLatitude;
     }
+
     public void setStartLatitude(Double startLatitude) {
-        startLatitude = startLatitude;
+        this.startLatitude = startLatitude;
     }
+
     public Double getStartLongitude() {
-        return StartLongitude;
+        return startLongitude;
     }
+
     public void setStartLongitude(Double startLongitude) {
-        StartLongitude = startLongitude;
+        this.startLongitude = startLongitude;
     }
+
     public String getStartLocationName() {
-        return StartLocationName;
+        return startLocationName;
     }
+
     public void setStartLocationName(String startLocationName) {
-        StartLocationName = startLocationName;
+        this.startLocationName = startLocationName;
     }
+
     public Double getEndLatitude() {
-        return EndLatitude;
+        return endLatitude;
     }
+
     public void setEndLatitude(Double endLatitude) {
-        EndLatitude = endLatitude;
+        this.endLatitude = endLatitude;
     }
+
     public Double getEndLongitude() {
-        return EndLongitude;
+        return endLongitude;
     }
+
     public void setEndLongitude(Double endLongitude) {
-        EndLongitude = endLongitude;
+        this.endLongitude = endLongitude;
     }
+
     public String getEndLocationName() {
-        return EndLocationName;
+        return endLocationName;
     }
+
     public void setEndLocationName(String endLocationName) {
-        EndLocationName = endLocationName;
+        this.endLocationName = endLocationName;
     }
+
 //    public List<FlightPosition> getPositions() {
 //        return positions;
 //    }
