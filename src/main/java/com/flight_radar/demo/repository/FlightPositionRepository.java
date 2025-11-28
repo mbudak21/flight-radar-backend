@@ -17,4 +17,7 @@ public interface FlightPositionRepository extends JpaRepository<FlightPosition, 
     List<FlightPosition> findByFlightRecord_Id(Integer id);
 
     List<FlightPosition> findAllByTime(LocalDateTime time);
+
+    List<FlightPosition> findTop2ByFlightRecordAndTimeLessThanEqualOrderByTimeDesc(FlightRecord record, LocalDateTime dateTime);
+    List<FlightPosition> findAllByFlightRecordAndTimeLessThanEqualOrderByTimeDesc(FlightRecord record, LocalDateTime dateTime);
 }

@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "flight_position", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"PID", "time"})
+        @UniqueConstraint(columnNames = {"flight_ID", "time"})
 })
 public class FlightPosition {
 

@@ -1,6 +1,10 @@
 package com.flight_radar.demo.model;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import org.hibernate.annotations.Formula;
+
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -11,7 +15,7 @@ public class FlightRecord {
     @Column(name = "ID", nullable = false)
     private Integer id;
 
-    @Column(name = "start_date")
+    @Formula("(SELECT MIN(fp.time) FROM flight_position fp WHERE fp.flight_ID = ID)")
     private LocalDateTime startDate;
 
     @Column(name = "start_latitude")
@@ -28,8 +32,14 @@ public class FlightRecord {
     @Column(name = "end_location_name")
     private String endLocationName;
 
-//    @OneToMany(mappedBy = "FlightRecord", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//    private List<FlightPosition> positions;
+    @JsonIgnore
+    @OneToMany(
+            mappedBy = "flightRecord",
+            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY,
+            orphanRemoval = true
+    )
+    private List<FlightPosition> positions = new ArrayList<>();
 
     // Getters & Setters
     public Integer getId() {
@@ -46,6 +56,24 @@ public class FlightRecord {
 
     public void setStartDate(LocalDateTime startDate) {
         this.startDate = startDate;
+    }
+
+    public void addPosition(FlightPosition position) {
+        positions.add(position);
+        position.setFlightRecord(this);
+    }
+
+    public void removePosition(FlightPosition position) {
+        positions.remove(position);
+        position.setFlightRecord(null);
+    }
+
+    public List<FlightPosition> getPositions() {
+        return positions;
+    }
+
+    public void setPositions(List<FlightPosition> positions) {
+        this.positions = positions;
     }
 
     public Double getStartLatitude() {
