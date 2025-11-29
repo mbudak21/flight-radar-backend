@@ -26,12 +26,14 @@ CREATE TABLE IF NOT EXISTS flight_position (
     UNIQUE (flight_ID, time) -- Ensure data integrity
 );
 
-SELECT * FROM flight_record;
-SELECT * FROM flight_position;
+CREATE TABLE IF NOT EXISTS airports (
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255),
+    lat double not NULL,
+    lng double not NULL
+);
 
-DROP TABLE flight_record;
-DROP TABLE flight_position;
-
+# Dummy Data
 INSERT INTO flight_record (
     start_latitude, start_longitude, start_location_name,
     end_latitude, end_longitude, end_location_name
@@ -57,14 +59,12 @@ VALUES
     (2, '2025-11-29 00:35:00', 32.9951, 32.9951);
 
 
-
-
-
-CREATE TABLE IF NOT EXISTS airports (
-    ID INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255),
-    lat double not NULL,
-    lng double not NULL
-);
-SELECT * FROM airports;
-DROP TABLE airports;
+# # Utility
+# SELECT * FROM airports;
+# DROP TABLE airports;
+#
+# SELECT * FROM flight_record;
+# SELECT * FROM flight_position;
+#
+# DROP TABLE flight_record;
+# DROP TABLE flight_position;

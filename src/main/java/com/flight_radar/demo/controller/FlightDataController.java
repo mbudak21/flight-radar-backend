@@ -75,30 +75,36 @@ public class FlightDataController {
 //    // POST ENDPOINTS
 //    // ==========================================
 //
-//    @PostMapping
-//    public ResponseEntity<FlightRecord> createFlight(@Valid @RequestBody CreateFlightRequest req) {
-//        System.out.println(req.startDate());
-//        FlightRecord savedRecord = flightRecordService.createNewFlightRecord(
-//                req.startDate(),
-//                req.startLatitude(),
-//                req.startLongitude(),
-//                req.startLocationName(),
-//                req.endLatitude(),
-//                req.endLongitude(),
-//                req.endLocationName()
-//        );
-//        return ResponseEntity.ok(savedRecord);
-//    }
-//
-//    @PostMapping("/{flightId}/positions")
-//    public ResponseEntity<FlightPosition> addPosition(@PathVariable Integer flightId,
-//                                                      @Valid @RequestBody FlightPositionDTO flightPositionDTO) {
-//        FlightPosition savedPosition = flightPositionService.createNewPosition(
-//                flightId,
-//                flightPositionDTO.latitude(),
-//                flightPositionDTO.longitude(),
-//                flightPositionDTO.time()
-//        );
-//        return ResponseEntity.ok(savedPosition);
-//    }
+    @PostMapping
+    public ResponseEntity<FlightRecord> createFlight(@Valid @RequestBody CreateFlightRequest req) {
+        System.out.println(req.startDate());
+        FlightRecord savedRecord = flightRecordService.createNewFlightRecord(
+                req.startLatitude(),
+                req.startLongitude(),
+                req.startLocationName(),
+                req.endLatitude(),
+                req.endLongitude(),
+                req.endLocationName()
+        );
+        return ResponseEntity.ok(savedRecord);
+    }
+
+    @PostMapping("/{flightId}/positions")
+    public ResponseEntity<FlightPosition> addPosition(@PathVariable Integer flightId,
+                                                      @Valid @RequestBody FlightPositionDTO flightPositionDTO) {
+        FlightPosition savedPosition = flightPositionService.createNewPosition(
+                flightId,
+                flightPositionDTO.latitude(),
+                flightPositionDTO.longitude(),
+                flightPositionDTO.time()
+        );
+        return ResponseEntity.ok(savedPosition);
+    }
+
+    @PostMapping("/{flightId}/positions/bulk")
+    public ResponseEntity<Void> addPositionsBulk(@PathVariable Integer flightId,
+                                                 @Valid @RequestBody List<FlightPositionDTO> positions) {
+        flightPositionService.addPositionsBulk(flightId, positions);
+        return ResponseEntity.ok().build();
+    }
 }

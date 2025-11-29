@@ -1,5 +1,6 @@
 package com.flight_radar.demo.service;
 
+import com.flight_radar.demo.dto.FlightPositionDTO;
 import com.flight_radar.demo.model.FlightPosition;
 import com.flight_radar.demo.model.FlightRecord;
 import com.flight_radar.demo.repository.FlightPositionRepository;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,5 +54,23 @@ public class FlightPositionService {
 
 
         return flightPositionRepository.save(pos);
+    }
+
+    @Transactional
+    public void addPositionsBulk(Integer flightId, List<FlightPositionDTO> positions){
+        FlightRecord flight =  flightRecordRepository.findById(flightId)
+                .orElseThrow(() -> new RuntimeException("FlightId not found"));
+
+        List<FlightPosition> entities = positions.stream()
+                .map(dto -> {
+                    FlightPosition p = new FlightPosition();
+                    p.setFlightRecord(flight);
+                    p.setTime(dto.time());
+                    p.setLatitude(dto.latitude());
+                    p.setLongitude(dto.longitude());
+                    return p;
+                })
+                .toList();
+        flightPositionRepository.saveAll(entities);
     }
 }

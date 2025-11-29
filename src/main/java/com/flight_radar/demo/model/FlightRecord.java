@@ -54,10 +54,6 @@ public class FlightRecord {
         return startDate;
     }
 
-    public void setStartDate(LocalDateTime startDate) {
-        this.startDate = startDate;
-    }
-
     public void addPosition(FlightPosition position) {
         positions.add(position);
         position.setFlightRecord(this);

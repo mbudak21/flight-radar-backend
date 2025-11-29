@@ -37,7 +37,6 @@ public class FlightRecordService {
     }
 
     public FlightRecord createNewFlightRecord(
-                                LocalDateTime startDate,
                                 double startLatitude,
                                 double startLongitude,
                                 String startLocationName,
@@ -46,7 +45,6 @@ public class FlightRecordService {
                                 String endLocationName){
 
         FlightRecord flightRecord = new FlightRecord();
-        flightRecord.setStartDate(startDate);
         flightRecord.setStartLatitude(startLatitude);
         flightRecord.setStartLongitude(startLongitude);
         flightRecord.setStartLocationName(startLocationName);
