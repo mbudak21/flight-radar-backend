@@ -10,7 +10,12 @@ airports = []
 with open("world-airports.csv", newline='', encoding="utf-8") as f:
     reader = csv.DictReader(f)
     for row in reader:
-        name = row["name"]
+        iata = row["iata_code"]
+        icao = row["icao_code"]
+
+        code = iata if iata else icao
+        
+        name = f"{row['municipality']} ({code})"
         lat = float(row["latitude_deg"])
         lon = float(row["longitude_deg"])
         type = row["type"]

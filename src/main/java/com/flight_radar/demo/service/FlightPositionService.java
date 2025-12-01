@@ -66,8 +66,8 @@ public class FlightPositionService {
                     FlightPosition p = new FlightPosition();
                     p.setFlightRecord(flight);
                     p.setTime(dto.time());
-                    p.setLatitude(dto.latitude());
-                    p.setLongitude(dto.longitude());
+                    p.setLatitude(dto.lat());
+                    p.setLongitude(dto.lng());
                     return p;
                 })
                 .toList();

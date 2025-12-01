@@ -14,6 +14,7 @@ public record FlightDTO (
         String endLocationName,
 
         LocalDateTime lastUpdatedAt,
+        LocalDateTime departureTime,
 
         Double posLat,
         Double posLng,

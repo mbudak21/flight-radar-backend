@@ -57,10 +57,16 @@ public class FlightDataController {
     @GetMapping("/{flightId}/positions")
     public ResponseEntity<List<FlightPositionDTO>> getPositions(
             @PathVariable Integer flightId,
-            @RequestParam(required = false)
-            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateTime
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateTime,
+            @RequestParam(required = false) Integer maxSize
     ) {
-        return ResponseEntity.ok(flightRecordService.getAllFlightPositionsByDate(flightId, dateTime));
+        if (maxSize == null) {
+            maxSize = Integer.MAX_VALUE;
+        }
+        if (dateTime == null) {
+            dateTime = LocalDateTime.now();
+        }
+        return ResponseEntity.ok(flightRecordService.getAllFlightPositionsByDate(flightId, dateTime, maxSize));
     }
 //
 //    @GetMapping("/positions")
@@ -94,8 +100,8 @@ public class FlightDataController {
                                                       @Valid @RequestBody FlightPositionDTO flightPositionDTO) {
         FlightPosition savedPosition = flightPositionService.createNewPosition(
                 flightId,
-                flightPositionDTO.latitude(),
-                flightPositionDTO.longitude(),
+                flightPositionDTO.lat(),
+                flightPositionDTO.lng(),
                 flightPositionDTO.time()
         );
         return ResponseEntity.ok(savedPosition);

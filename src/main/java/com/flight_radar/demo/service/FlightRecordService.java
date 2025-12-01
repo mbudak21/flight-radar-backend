@@ -11,7 +11,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import com.flight_radar.demo.dto.FlightDTO;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -54,15 +56,40 @@ public class FlightRecordService {
         return flightRecordRepository.save(flightRecord);
     }
 
-    public List<FlightPositionDTO> getAllFlightPositionsByDate(Integer flightId, LocalDateTime date){
+    private List<FlightPosition> downsample(List<FlightPosition> list, int maxSize) {
+        int n = list.size();
+        if (n <= maxSize) return list;
+
+        int last = n - 1;
+        double step = (double) last / (maxSize - 1);
+
+        List<FlightPosition> out = new ArrayList<>(maxSize);
+        for (int i = 0; i < maxSize; i++) {
+            int idx = (int) Math.round(i * step);
+            out.add(list.get(idx));
+        }
+        return out;
+    }
+
+    public List<FlightPositionDTO> getAllFlightPositionsByDate(Integer flightId, LocalDateTime date, Integer maxSize){
+        if(maxSize == null || maxSize <= 1) {
+            throw new IllegalArgumentException("maxSize must be >= 2");
+        }
+
         FlightRecord record = flightRecordRepository.findById(flightId)
                 .orElseThrow(() -> new RuntimeException("Flight not found: " + flightId));
 
+        // Get positions from repo
         List<FlightPosition> positions = flightPositionRepository.findAllByFlightRecordAndTimeLessThanEqualOrderByTimeDesc(record, date);
+
+        if (positions.size() > maxSize) {
+            positions = downsample(positions, maxSize);
+        }
+
+        // Convert to DTO
         return positions.stream()
                 .map(p -> new FlightPositionDTO(p.getLatitude(), p.getLongitude(), p.getTime()))
                 .toList();
-
     }
 
 
@@ -83,9 +110,25 @@ public class FlightRecordService {
                     FlightPosition prev = positions.size() > 1 ? positions.get(1) : null;
 
                     if (current == null) {
-                        // No position yet at this time -> skip this flight
+                        // No position yet at this time -> skip flight
                         return null;
                     }
+                    LocalDateTime lastUpdatedAt = current.getTime();
+
+                    double latDiff = Math.abs(record.getEndLatitude() - current.getLatitude());
+                    double lngDiff = Math.abs(record.getEndLongitude() - current.getLongitude());
+
+//                    if (current.getTime() - dateTime
+////                        && latDiff < 0.01 && lngDiff < 0.01
+//                    ) {
+//                        return null;
+//                    }
+
+                    if (current.getTime().isBefore(dateTime.minusMinutes(5))){
+                        return null;
+                    }
+
+
 
                     return new FlightDTO(
                             record.getId(),
@@ -97,7 +140,11 @@ public class FlightRecordService {
                             record.getEndLongitude(),
                             record.getEndLocationName(),
 
-                            prev != null ?  prev.getTime(): current.getTime(),
+                            // LastUpdatedAt:
+                            lastUpdatedAt,
+
+                            // Departure Time
+                            record.getStartDate(),
 
                             current.getLatitude(),
                             current.getLongitude(),

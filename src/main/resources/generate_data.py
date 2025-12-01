@@ -1,9 +1,9 @@
 # import mysql.connector
+from geographiclib.geodesic import Geodesic
 import random
 from datetime import datetime, timedelta
 import math
 import requests
-import json
 import argparse
 import sys
 
@@ -127,6 +127,18 @@ def haversine_km(lat1, lon1, lat2, lon2):
 def lerp(a, b, t: float):
     return a + (b - a) * t
 
+def geodesic_path(lat1, lng1, lat2, lng2, num_points):
+    g = Geodesic.WGS84.Inverse(lat1, lng1, lat2, lng2)
+    l = Geodesic.WGS84.Line(lat1, lng1, g['azi1'])
+
+    points = []
+    for i in range(num_points+1):
+        s = g['s12'] * (i / num_points)
+        p = l.Position(s)
+        points.append((p['lat2'], p['lon2']))
+
+    return points
+
 def random_datetime(start: datetime, end: datetime) -> datetime:
     delta_seconds = int((end - start).total_seconds())
     offset_seconds = random.randint(0, delta_seconds)
@@ -146,11 +158,12 @@ def create_flight(url, payload) -> int:
     return int(r.json()["id"])
 
 def send_coords(url, positions):
+    print(f"start: {positions[0][0]}, end: {positions[-1][0]}")
     print(f"Sending {len(positions)} positions...", end="")
     for i, pos in enumerate(positions):
         payload = {
-            "latitude": pos[1],
-            "longitude": pos[2],
+            "lat": pos[1],
+            "lng": pos[2],
             "time": pos[0]             
         }
 
@@ -172,7 +185,7 @@ def send_coords_bulk(url, positions, batch_size=5000):
 
     for batch_idx, batch in enumerate(chunks(positions, batch_size), start=1):
         payload = [
-            {"time": ts, "latitude": lat, "longitude": lng}
+            {"time": ts, "lat": lat, "lng": lng}
             for (ts, lat, lng) in batch
         ]
 
@@ -205,13 +218,18 @@ def generate_n_flights(n: int, airports, START_DATE, END_DATE, BATCH_SIZE):
         start_date = random_datetime(START_DATE, END_DATE - duration)
 
         # Generate positions
+        coords = geodesic_path(start["lat"], start["lng"], end["lat"], end["lng"], total_seconds)
         positions = []
-        for i in range(total_seconds):
-            t = i / total_seconds
-            lat = lerp(start["lat"], end["lat"], t)
-            lng = lerp(start["lng"], end["lng"], t)
+        for i, (lat, lng) in enumerate(coords):
             ts = (start_date + timedelta(seconds=i)).strftime("%Y-%m-%dT%H:%M:%S")
             positions.append((ts, lat, lng))
+        
+        # for i in range(total_seconds):
+        #     t = i / total_seconds
+        #     lat = lerp(start["lat"], end["lat"], t)
+        #     lng = lerp(start["lng"], end["lng"], t)
+        #     ts = (start_date + timedelta(seconds=i)).strftime("%Y-%m-%dT%H:%M:%S")
+        #     positions.append((ts, lat, lng))
 
 
         print(f"Generated {len(positions)} positions")
