@@ -33,30 +33,30 @@ CREATE TABLE IF NOT EXISTS airports (
     lng double not NULL
 );
 
-# Dummy Data
-INSERT INTO flight_record (
-    start_latitude, start_longitude, start_location_name,
-    end_latitude, end_longitude, end_location_name
-)
-VALUES
-    -- Flight 1: Istanbul -> Berlin
-    (
-        41.2753, 28.7519, 'Istanbul Airport (IST)',
-        52.3667, 13.5033, 'Berlin Brandenburg (BER)'
-    ),
-    -- Flight 2: Ankara -> London
-    (
-        40.1281, 32.9951, 'Ankara Esenboğa (ESB)',
-        51.4700, -0.4543, 'London Heathrow (LHR)'
-    );
-
-INSERT INTO flight_position (flight_ID, time, latitude, longitude)
-VALUES
-    (1, '2025-11-29 00:35:00', 40.1281, 32.9951),
-    (1, '2025-11-29 00:35:01', 40.1286, 32.9951),
-    (1, '2025-11-29 00:35:02', 40.1289, 32.9951),
-
-    (2, '2025-11-29 00:35:00', 32.9951, 32.9951);
+# # Dummy Data
+# INSERT INTO flight_record (
+#     start_latitude, start_longitude, start_location_name,
+#     end_latitude, end_longitude, end_location_name
+# )
+# VALUES
+#     -- Flight 1: Istanbul -> Berlin
+#     (
+#         41.2753, 28.7519, 'Istanbul Airport (IST)',
+#         52.3667, 13.5033, 'Berlin Brandenburg (BER)'
+#     ),
+#     -- Flight 2: Ankara -> London
+#     (
+#         40.1281, 32.9951, 'Ankara Esenboğa (ESB)',
+#         51.4700, -0.4543, 'London Heathrow (LHR)'
+#     );
+#
+# INSERT INTO flight_position (flight_ID, time, latitude, longitude)
+# VALUES
+#     (1, '2025-11-29 00:35:00', 40.1281, 32.9951),
+#     (1, '2025-11-29 00:35:01', 40.1286, 32.9951),
+#     (1, '2025-11-29 00:35:02', 40.1289, 32.9951),
+#
+#     (2, '2025-11-29 00:35:00', 32.9951, 32.9951);
 
 
 # # Utility
