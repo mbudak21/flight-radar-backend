@@ -8,7 +8,7 @@ import argparse
 import sys
 
 
-BACKEND_URL = "http://localhost:8080/api/"
+BACKEND_URL = "https://api.mbudak21.com/api/"
 
 # --- tiny color helper ---
 class C:
@@ -247,7 +247,7 @@ def generate_n_flights(n: int, airports, START_DATE, END_DATE, BATCH_SIZE):
         id = create_flight(BACKEND_URL + "flights", payload)
 
         # Send the Flight positions to the Backend
-        send_coords_bulk(f"http://localhost:8080/api/flights/{id}/positions/bulk", positions, BATCH_SIZE)
+        send_coords_bulk(BACKEND_URL + f"flights/{id}/positions/bulk", positions, BATCH_SIZE)
 
 
 
