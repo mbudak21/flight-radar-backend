@@ -1,0 +1,250 @@
+{
+	"info": {
+		"_postman_id": "beda62e7-f859-4937-a122-79ee32f671c2",
+		"name": "FlightRadar",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "39618761"
+	},
+	"item": [
+		{
+			"name": "Get All Flights",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/flights?dateTime=2025-11-30T16:35:00",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"flights"
+					],
+					"query": [
+						{
+							"key": "dateTime",
+							"value": "2025-11-30T16:35:00"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Flight By Id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/flights/{{flight_id}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"flights",
+						"{{flight_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Positions Of Flight",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/flights/{{flight_id}}/positions?dateTime=2025-11-30T20:56:01&maxSize=3",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"flights",
+						"{{flight_id}}",
+						"positions"
+					],
+					"query": [
+						{
+							"key": "dateTime",
+							"value": "2025-11-30T20:56:01"
+						},
+						{
+							"key": "maxSize",
+							"value": "3"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Positions",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/flights/positions",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"flights",
+						"positions"
+					],
+					"query": [
+						{
+							"key": "dateTime",
+							"value": "2025-11-02T14:30:00",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Positions By Datetime",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/flights/positions?dateTime=2026-11-02T14:30:00",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"flights",
+						"positions"
+					],
+					"query": [
+						{
+							"key": "dateTime",
+							"value": "2026-11-02T14:30:00"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Flight",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\"startLatitude\": 40.7128,\n\"startLongitude\": -74.0060,\n\"startLocationName\": \"New York (JFK)\",\n\"endLatitude\": 51.5074,\n\"endLongitude\": -0.1278,\n\"endLocationName\": \"London (LHR)\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/flights",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"flights"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Position To Flight",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"lat\": 0.12,\n  \"lng\": 0.13,\n  \"time\": \"2000-01-01T12:00:00\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/flights/{{flight_id}}/positions",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"flights",
+						"{{flight_id}}",
+						"positions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Positions To Flight Bulk",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[\n  {\n    \"time\": \"2025-01-01T00:00:00\",\n    \"latitude\": 40.1289,\n    \"longitude\": 32.9951\n  },\n  {\n    \"time\": \"2025-01-01T00:00:01\",\n    \"latitude\": 40.1290,\n    \"longitude\": 32.9953\n  },\n  {\n    \"time\": \"2025-01-01T00:00:02\",\n    \"latitude\": 40.1291,\n    \"longitude\": 32.9955\n  }\n]\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/flights/{{flight_id}}/positions/bulk",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"flights",
+						"{{flight_id}}",
+						"positions",
+						"bulk"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Airports",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/airports",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"airports"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "flight_id",
+			"value": "",
+			"type": "default"
+		}
+	]
+}
