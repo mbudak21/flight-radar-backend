@@ -14,6 +14,9 @@ import jakarta.validation.Valid;
 
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RestController
@@ -98,11 +101,14 @@ public class FlightDataController {
     @PostMapping("/{flightId}/positions")
     public ResponseEntity<FlightPosition> addPosition(@PathVariable Integer flightId,
                                                       @Valid @RequestBody FlightPositionDTO flightPositionDTO) {
+        LocalDateTime utcNow = LocalDateTime.now(ZoneOffset.UTC);
+
+
         FlightPosition savedPosition = flightPositionService.createNewPosition(
                 flightId,
                 flightPositionDTO.lat(),
                 flightPositionDTO.lng(),
-                flightPositionDTO.time()
+                flightPositionDTO.time() != null ? flightPositionDTO.time() : utcNow
         );
         return ResponseEntity.ok(savedPosition);
     }
