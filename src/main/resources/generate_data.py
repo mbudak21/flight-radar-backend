@@ -8,7 +8,8 @@ import argparse
 import sys
 
 
-BACKEND_URL = "https://api.mbudak21.com/api/"
+# BACKEND_URL = "https://api.mbudak21.com/api/"
+BACKEND_URL = "http://localhost:8080/api/"
 
 # --- tiny color helper ---
 class C:
